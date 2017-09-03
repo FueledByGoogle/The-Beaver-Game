@@ -37,6 +37,7 @@ sysinfo.txt\
 # Builds\
 *.apk\
 *.unitypackage\
+/BeaverFeaverBuild
 \
 \
 # DS_Store\
