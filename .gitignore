@@ -7,7 +7,7 @@
 \pard\pardeftab720\partightenfactor0
 
 \f0\fs26 \cf0 \expnd0\expndtw0\kerning0
-[Ll]ibrary/\
+[Ll]ibrary/
 [Tt]emp/\
 [Oo]bj/\
 [Bb]uild/\
@@ -37,9 +37,9 @@ sysinfo.txt\
 # Builds\
 *.apk\
 *.unitypackage\
-/BeaverFeaverBuild/
+**[Bb]uild**/
 \
 \
 # DS_Store\
-.DS_Store\
+.DS_Store
 demos/.DS_Store}
