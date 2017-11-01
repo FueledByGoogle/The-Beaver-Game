@@ -15,7 +15,7 @@ public class Dam : MonoBehaviour
 	
 	void OnCollisionEnter2D (Collision2D other)
 	{
-		if (other.gameObject.tag == "garbage")
+		if (other.gameObject.tag == "Garbage")
 		{
 
 			FloatingObject object_hit = other.gameObject.GetComponent<FloatingObject> ();

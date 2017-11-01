@@ -15,7 +15,7 @@ public class PointScorer : MonoBehaviour
 
 	void OnTriggerEnter2D (Collider2D other)
 	{
-		if (other.gameObject.tag == "garbage")
+		if (other.gameObject.tag == "Garbage")
 		{
 			FloatingObject garbage_hit = other.gameObject.GetComponent<FloatingObject> ();
 
@@ -30,7 +30,7 @@ public class PointScorer : MonoBehaviour
 		}
 		if (other.transform.root.tag != "Player") //prevents player from being destroyed by accident if it touches trigger
 		{
-			Destroy (other.gameObject, 2f);
+			Destroy (other.gameObject, 0.5f);
 		}
 	}
 }

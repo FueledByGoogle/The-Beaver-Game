@@ -19,7 +19,6 @@ public class ItemSpawnManager : MonoBehaviour
 	void Start () {
 		timeUntilNextSpawn = 0;
 		originWorld = transform.position;
-
 	}
 
 	void Update () {
