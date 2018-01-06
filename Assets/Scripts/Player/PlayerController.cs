@@ -6,88 +6,66 @@ using UnityStandardAssets.CrossPlatformInput;
 public class PlayerController : MonoBehaviour
 {
 
-	public float movSpeed = 1.5f;
-
-	private Rigidbody2D rigidBody2D;
 	private Transform player_root_transform; //move player based on root transform, save computing?
+	private int touch_count = 0;
 
-	private Vector3 offsetVec;
+	/*
+	 *  Hard coding how much player can move
+	 */
 
-
-
-
-	Matrix4x4 calibrationMatrix;
-	Vector3 wantedDeadZone  = Vector3.zero;
-
-	//Finally how you get the accelerometer input
-	Vector3 _InputDir;
-
-	void Start()
+	void Start ()
 	{
-		rigidBody2D = gameObject.GetComponent<Rigidbody2D> ();
 		player_root_transform = transform.root.transform;
-		CalibrateOffset ();
 	
 	}
 
 	void Update ()
 	{
-		CalibrateOffset ();
-	}
-
-
-	void FixedUpdate ()
-	{
-		_InputDir = getAccelerometer(Input.acceleration);
-		//then in your code you use _InputDir instead of Input.acceleration for example 
-//		transform.Translate (_InputDir.x, 0, -_InputDir.z);
-		rigidBody2D.velocity = new Vector3 (_InputDir.x * movSpeed, _InputDir.y * movSpeed, 0f);
-
-
-
-	
-//		rigidBody2D.velocity = new Vector3 ((Input.acceleration.x - offsetVec.x) * movSpeed, (Input.acceleration.y - offsetVec.y) * movSpeed);
-//		Debug.Log ("RawX " + Input.acceleration.x + ", RawY " + Input.acceleration.y);
-
-		float heading = Mathf.Atan2 (Input.acceleration.x, Input.acceleration.y);
-
-		//Debug.Log ("X acceleration: " + Input.acceleration.x + " Y acccleration: " + Input.acceleration.y);
-		//Debug.Log ("heading: " + heading);
-
-		//need to make negative to fix side rotation
-		//player_root_transform.rotation = Quaternion.Euler (0f, 0f, - heading * Mathf.Rad2Deg);
-
-	}
-
-	void CalibrateOffset ()
-	{
-		if (CrossPlatformInputManager.GetButton ("OffsetButton"))
+		if (Input.touchCount == 1) // single finger press
 		{
-//			offsetVec.x = Input.acceleration.x;
-//			offsetVec.y = Input.acceleration.y;
-//			offsetVec.z = 0f;
-			calibrateAccelerometer();
+			Touch touch = Input.touches [0];
+			TouchPhase touch_phase = touch.phase;
+
+			switch (touch.phase)
+			{
+			// Record initial touch position.
+			case TouchPhase.Began:
+					if (touch.position.x < Screen.width / 2) // left
+					{
+						touch_count++;
+						
+						if (player_root_transform.position.x - 1 > -1.46) // hard code left boundary
+						{
+							player_root_transform.Translate (new Vector3 (-1, 0));
+						}
+					} else if (touch.position.x > Screen.width / 2) // right
+					{
+						touch_count++;
+						if (player_root_transform.position.x + 1 < 2.53) // hard code right boundary
+						{
+							player_root_transform.Translate (new Vector3 (1, 0));
+						}
+					}
+				break;
+
+				// Determine direction by comparing the current touch position with the initial one.
+			case TouchPhase.Moved:
+
+				break;
+
+				// Report that a direction has been chosen when the finger is lifted.
+			case TouchPhase.Ended:
+
+				break;
+			}
+
+		
+		}
+
+		if (Input.touchCount == 2)
+		{
+			Debug.Log ("two!");
 		}
 	}
 
-
-
-	//Method for calibration 
-	void calibrateAccelerometer()
-	{
-		wantedDeadZone = Input.acceleration;
-		Quaternion rotateQuaternion = Quaternion.FromToRotation(new Vector3(0f, 0f, -1f), wantedDeadZone);
-		//create identity matrix ... rotate our matrix to match up with down vec
-		Matrix4x4 matrix = Matrix4x4.TRS(Vector3.zero, rotateQuaternion, new Vector3(1f, 1f, 1f));
-		//get the inverse of the matrix
-		calibrationMatrix = matrix.inverse;
-
-	}
-
-	//Method to get the calibrated input 
-	Vector3 getAccelerometer(Vector3 accelerator){
-		Vector3 accel = this.calibrationMatrix.MultiplyVector(accelerator);
-		return accel;
-	}
-		
 }

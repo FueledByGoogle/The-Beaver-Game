@@ -12,9 +12,9 @@ public class DataController : MonoBehaviour
 	public static DataController data_controller;
 
 	[HideInInspector]
-	public int curr_score;
+	public int curr_score = 0;
 
-	public int high_score;
+	public int high_score = 0;
 
 
 	void Awake ()
@@ -31,6 +31,12 @@ public class DataController : MonoBehaviour
 			Destroy (gameObject);
 		}
 	}
+
+	void Start ()
+	{
+		
+	}
+
 
 	public void Save ()
 	{
@@ -60,18 +66,18 @@ public class DataController : MonoBehaviour
 	public void Load ()
 	{
 		// We have to make sure file exists and then attempt to read it.
-		if (File.Exists(Application.persistentDataPath + "/playerInfo.dat"))
+		if (File.Exists (Application.persistentDataPath + "/playerInfo.dat"))
 		{
 			BinaryFormatter bf = new BinaryFormatter ();
 			FileStream file = File.Open (Application.persistentDataPath + "/playerInfo.dat", FileMode.Open);
 			PlayerData loaded_player_data = (PlayerData)bf.Deserialize (file); // We don't know what file this is, so we need to cast it by doing (PlayerData)
-			file.Close();
+			file.Close ();
 
 			high_score = loaded_player_data.GetHighScore ();
 		}
 	}
 
-	public void UpdateCurrentScore (int point)
+	public void UpdateScore (int point)
 	{
 		curr_score += point;
 		if (curr_score > high_score)

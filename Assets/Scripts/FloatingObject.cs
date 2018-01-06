@@ -5,36 +5,25 @@ using UnityEngine;
 public class FloatingObject : MonoBehaviour
 {
 	[HideInInspector]
-	public Rigidbody2D rigid_body_2D;
-	[HideInInspector]
-	public bool hit_by_player; // used to determine whether when coming in contact with other garbage to explode.
+	public float mov_speed = 0f;
 
-	[Range(0,1)]
-	public int floating_obj_type;
-	/* 0 = garbage
-	 * 
-	 */
+	public int damage = 0;
 
-	public int damage_to_dam;
-	public int score_point;
-
-
-
-	void Start ()
+	void Update ()
 	{
-		hit_by_player = false;
-		rigid_body_2D = gameObject.GetComponent<Rigidbody2D> ();
+		transform.Translate (new Vector3 (0, -mov_speed));
 	}
 
-	void OnCollisionEnter2D (Collision2D other)
+	void OnTriggerEnter2D (Collider2D other)
 	{
 		// used for when two garbage collide from player's ability
-		if (hit_by_player && other.transform.tag == "Garbage")
+		if (other.gameObject.tag == "Player")
 		{
-			FloatingObject other_garbage_hit = other.gameObject.GetComponent<FloatingObject> ();
-			DataController.data_controller.UpdateCurrentScore ((other_garbage_hit.score_point + score_point) * 2);
-			Destroy (other.gameObject, 0.2f);
-			Destroy (this.gameObject, 0.2f);
+			Player player = other.gameObject.GetComponent<Player> ();
+			if (player != null)
+			{
+				player.TakeDamage (damage);
+			}
 		}
 	}
 }

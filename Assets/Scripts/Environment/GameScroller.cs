@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaterScroller : MonoBehaviour
+public class GameScroller: MonoBehaviour
 {
-	public float scrollSpeed;
-	public float tileSizeZ;
+	public float scroll_speed;
+	public float tile_size_z;
 
 	private Vector3 startPos;
 
@@ -16,7 +16,7 @@ public class WaterScroller : MonoBehaviour
 
 	void Update ()
 	{
-		float newPos = Mathf.Repeat (Time.time * scrollSpeed, tileSizeZ);
+		float newPos = Mathf.Repeat (Time.time * scroll_speed, tile_size_z);
 		transform.position = startPos + Vector3.down * newPos;
 	}
 
